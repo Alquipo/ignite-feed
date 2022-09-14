@@ -1,6 +1,6 @@
 import { format, formatDistanceToNow } from "date-fns";
 import ptBR from "date-fns/locale/pt-BR";
-import { ReactElement, JSXElementConstructor, ReactFragment } from "react";
+
 
 
 import { Avatar } from "./Avatar"
@@ -8,6 +8,11 @@ import { Comment } from "./Comment"
 import styles from "./Post.module.css"
 
 
+const comments = [
+  1,
+  2,
+  3
+]
 export function Post({ author, publishedAt, content }: any) {
 
   const publishedDateFormatted = format(publishedAt, "d 'de' LLLL 'às' HH:mm'h'", {
@@ -19,7 +24,6 @@ export function Post({ author, publishedAt, content }: any) {
     addSuffix: true
 
   })
-
 
   return (
     <article className={styles.post}>
@@ -58,9 +62,9 @@ export function Post({ author, publishedAt, content }: any) {
       </form>
 
       <div className={styles.commentList}>
-        <Comment />
-        <Comment />
-        <Comment />
+        {comments.map(comment => (
+          <Comment />
+        ))}
       </div>
 
     </article>
