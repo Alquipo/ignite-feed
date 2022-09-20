@@ -1,17 +1,29 @@
 import { format, formatDistanceToNow } from "date-fns";
 import ptBR from "date-fns/locale/pt-BR";
-import { useState } from "react";
-
-
+import { ChangeEvent, FormEvent, InvalidEvent, useState } from "react";
 
 import { Avatar } from "./Avatar"
 import { Comment } from "./Comment"
 import styles from "./Post.module.css"
 
+interface Author {
+  name: string
+  role: string
+  avatarUrl: string
+}
 
-export function Post({ author, publishedAt, content }: any) {
+interface Content {
+  type: "paragraph" | "link"
+  content: string
+}
+export interface PostsProps {
+  author: Author
+  content: Content[]
+  publishedAt: Date
+}
+export function Post({ author, publishedAt, content }: PostsProps) {
   const [comments, setComments] = useState([
-    "Post muito bacana, heim?!",
+    "Post muito bacana, hein?!",
   ])
   const [newCommentText, setNewCommentText] = useState("")
 
@@ -25,23 +37,23 @@ export function Post({ author, publishedAt, content }: any) {
 
   })
 
-  const handleCreateNewComment = (event: any) => {
+  const handleCreateNewComment = (event: FormEvent) => {
     event.preventDefault()
 
     setComments([...comments, newCommentText])
     setNewCommentText("")
   }
 
-  const handleNewCommentChange = (event: any) => {
+  const handleNewCommentChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
     event.target.setCustomValidity("")
     setNewCommentText(event.target.value)
   }
 
-  const handleNewCommentInvalid = (event: any) => {
+  const handleNewCommentInvalid = (event: InvalidEvent<HTMLTextAreaElement>) => {
     event.target.setCustomValidity("Esse campo é obrigatório!")
   }
 
-  const deleteComment = (commentToDelete: any) => {
+  const deleteComment = (commentToDelete: string) => {
     const commentsWithoutDeletedOne = comments.filter(comment => {
       return comment !== commentToDelete
     })
@@ -65,7 +77,7 @@ export function Post({ author, publishedAt, content }: any) {
       </header>
 
       <div className={styles.content}>
-        {content.map((line: any) => {
+        {content.map((line) => {
           if (line.type === "paragraph") {
             return <p key={line.content}>{line.content}</p>
           } else if (line.type === "link") {
